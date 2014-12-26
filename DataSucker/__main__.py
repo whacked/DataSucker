@@ -6,12 +6,16 @@ import datetime
 
 app = Flask(__name__)
 app.config['DATA_DIR'] = '.'
+app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/<path:path>', methods=['GET', 'POST'])
 def catchall(path=''):
-    d = request.values.to_dict()
+    if request.headers.get('Content-Type') == 'application/json':
+        d = request.json
+    else:
+        d = request.values.to_dict()
     if d:
         if path and pexists(pjoin(app.config['DATA_DIR'], path)):
             filename = path
@@ -21,7 +25,9 @@ def catchall(path=''):
                     datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S.%f'))
         output_filepath = pjoin(app.config['DATA_DIR'], filename)
         with open(output_filepath, 'a') as ofile:
-            ofile.write(json.dumps(d))
+            data = json.dumps(d)
+            ofile.write(data)
+            print('wrote {0} bytes to {1}'.format(len(data), ofile.name))
         return output_filepath
     return ''
 
