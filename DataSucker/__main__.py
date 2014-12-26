@@ -1,11 +1,12 @@
 from flask import Flask, request
+from flask.ext.cors import CORS
 import json
 from os.path import join as pjoin, exists as pexists
 import datetime
 
 app = Flask(__name__)
 app.config['DATA_DIR'] = '.'
-
+cors = CORS(app)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/<path:path>', methods=['GET', 'POST'])
