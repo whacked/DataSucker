@@ -25,5 +25,10 @@ def catchall(path=''):
     return ''
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import sys
+    if len(sys.argv) == 2 and sys.argv[-1].isdigit():
+        port = int(sys.argv[-1])
+    else:
+        port = 8000
+    app.run('0.0.0.0', port)
 
