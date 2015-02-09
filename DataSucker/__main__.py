@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask.ext.cors import CORS
 import json
+import os
 from os.path import join as pjoin, exists as pexists
 import datetime
 
@@ -33,9 +34,21 @@ def catchall(path=''):
 
 if __name__ == '__main__':
     import sys
-    if len(sys.argv) == 2 and sys.argv[-1].isdigit():
-        port = int(sys.argv[-1])
-    else:
-        port = 8000
+    port = 8000
+    for arg in sys.argv[1:]:
+        if arg.isdigit():
+            print('setting port to %s' % arg)
+            port = int(arg)
+        else:
+            if arg.startswith(os.path.sep):
+                path = arg
+            else:
+                path = os.path.abspath(pjoin(os.getcwd(), arg))
+            if pexists(path):
+                app.config['DATA_DIR'] = path
+            else:
+                print('does not exist: %s' % path)
+                sys.exit(1)
+    print('setting output directory to %s' % os.path.abspath(app.config['DATA_DIR']))
     app.run('0.0.0.0', port)
 
