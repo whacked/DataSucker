@@ -47,8 +47,8 @@ if __name__ == '__main__':
             if pexists(path):
                 app.config['DATA_DIR'] = path
             else:
-                print('does not exist: %s' % path)
-                sys.exit(1)
+                print('does not exist: %s.\ncreating it...' % path)
+                os.mkdir(path)
     print('setting output directory to %s' % os.path.abspath(app.config['DATA_DIR']))
     app.run('0.0.0.0', port)
 
