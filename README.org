@@ -1,0 +1,9 @@
+* DataSucker
+
+  it just dumps HTTP requests to json files
+
+  =python setup.py install=
+
+  then
+
+  =python -mDataSucker=
